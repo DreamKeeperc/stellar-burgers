@@ -10,9 +10,22 @@ import {
 
 import { TBurgerIngredientUIProps } from './type';
 
+import { getConstructorSelector } from '../../../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
+import { useDispatch, useSelector } from '../../../services/store';
+import {
+  getIngredientModal,
+  showModal
+} from '../../../services/slices/modalIngredient/modalIngredientSlice';
+
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
+    const dispatch = useDispatch();
+    const {} = useSelector(getIngredientModal);
+
+    const handleClick = () => {
+      dispatch(showModal(ingredient));
+    };
 
     return (
       <li className={styles.container}>
@@ -20,6 +33,7 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
           className={styles.article}
           to={`/ingredients/${_id}`}
           state={locationState}
+          onClick={handleClick}
         >
           {count && <Counter count={count} />}
           <img className={styles.img} src={image} alt='картинка ингредиента.' />
