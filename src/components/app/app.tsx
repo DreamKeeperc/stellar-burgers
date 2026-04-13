@@ -89,6 +89,7 @@ const App = () => {
           }
         />
         <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/login'
           element={
@@ -131,6 +132,7 @@ const App = () => {
         >
           <Route index element={<Profile />} />
           <Route path='orders' element={<ProfileOrders />} />
+          <Route path='orders/:number' element={<OrderInfo />} />
         </Route>
       </Routes>
 

@@ -15,7 +15,8 @@ const initialState: TFeedsState = {
     totalToday: 0
   },
   isLoading: false,
-  error: null
+  error: null,
+  modalData: null
 };
 
 export const feedsSlice = createSlice({
@@ -43,5 +44,6 @@ export const feedsSlice = createSlice({
 });
 
 export const { getFeedsSelector } = feedsSlice.selectors;
+export const {} = feedsSlice.actions;
 
 export default feedsSlice.reducer;
