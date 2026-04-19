@@ -40,7 +40,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
           className={({ isActive }) =>
             isActive ? styles.link_active : styles.link
           }
-          to={'/login'}
+          to={'/profile'}
         >
           <ProfileIcon type={'primary'} />
           <p className='text text_type_main-default ml-2'>

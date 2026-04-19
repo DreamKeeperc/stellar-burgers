@@ -5,7 +5,7 @@ import {
   getUserSelector,
   loginUser
 } from '../../services/slices/userSlice/userSlice';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Login: FC = () => {
   const navigate = useNavigate();

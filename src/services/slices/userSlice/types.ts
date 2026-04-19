@@ -7,3 +7,8 @@ export type TUserState = {
   loginUserError: string | null;
   loginUserRequest: boolean;
 };
+
+export type TFieldType<T> = {
+  field: keyof T;
+  value: string;
+};

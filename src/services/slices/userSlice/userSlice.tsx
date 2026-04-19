@@ -3,11 +3,13 @@ import {
   loginUserApi,
   logoutApi,
   registerUserApi,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUserState } from './types';
 import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie';
+import { TUser } from '@utils-types';
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
@@ -46,6 +48,14 @@ export const getUser = createAsyncThunk('user/getUser', async () => {
   const data = await getUserApi();
   return data.user;
 });
+
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async ({ name, email, password }: Partial<TRegisterData>) => {
+    const data = await updateUserApi({ name, email, password });
+    return data.user;
+  }
+);
 
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
@@ -130,6 +140,20 @@ export const userSlice = createSlice({
         state.data = null;
       })
       .addCase(getUser.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.loginUserRequest = false;
+        state.isAuthenticated = true;
+      })
+
+      //updateUser
+      .addCase(updateUser.pending, (state) => {
+        state.loginUserRequest = true;
+      })
+      .addCase(updateUser.rejected, (state) => {
+        state.loginUserRequest = false;
+        state.isAuthenticated = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
         state.data = action.payload;
         state.loginUserRequest = false;
         state.isAuthenticated = true;

@@ -1,21 +1,18 @@
 import { FC, memo, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
 import { OrderCardUI } from '../ui/order-card';
 import { getIngredientsSelector } from '../../services/slices/ingredientsSlice/ingredientsSlice';
-
 import { useDispatch, useSelector } from '../../services/store';
 import { getOrderSelector } from '../../services/slices/orderSlice/orderSlice';
-import { getFeedsSelector } from '../../services/slices/feedsSlice/feedsSlice';
+import { addModal } from '../../services/slices/feedsSlice/feedsSlice';
 
 const maxIngredients = 6;
 
 export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { ingredients: ingredientsFromConstructor } = useSelector(
     getIngredientsSelector
@@ -59,11 +56,7 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   if (!orderInfo) return null;
 
   const handleClick = () => {
-    const basePath =
-      location.pathname === '/feed' ? '/feed' : '/profile/orders';
-    navigate(`${basePath}/${order.number}`, {
-      state: { background: location }
-    });
+    dispatch(addModal(order));
   };
 
   return (

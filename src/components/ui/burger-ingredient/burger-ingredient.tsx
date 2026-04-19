@@ -1,27 +1,19 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './burger-ingredient.module.css';
-
 import {
   Counter,
   CurrencyIcon,
   AddButton
 } from '@zlden/react-developer-burger-ui-components';
-
 import { TBurgerIngredientUIProps } from './type';
-
-import { getConstructorSelector } from '../../../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
 import { useDispatch, useSelector } from '../../../services/store';
-import {
-  getIngredientModal,
-  showModal
-} from '../../../services/slices/modalIngredient/modalIngredientSlice';
+import { showModal } from '../../../services/slices/modalIngredient/modalIngredientSlice';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
     const dispatch = useDispatch();
-    const {} = useSelector(getIngredientModal);
 
     const handleClick = () => {
       dispatch(showModal(ingredient));

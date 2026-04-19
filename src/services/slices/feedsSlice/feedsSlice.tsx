@@ -22,7 +22,14 @@ const initialState: TFeedsState = {
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
-  reducers: {},
+  reducers: {
+    addModal: (state, { payload }: PayloadAction<TOrder>) => {
+      state.modalData = payload;
+    },
+    refreshFeeds: (state) => {
+      state.feeds.orders = [];
+    }
+  },
   selectors: {
     getFeedsSelector: (state) => state
   },
@@ -44,6 +51,6 @@ export const feedsSlice = createSlice({
 });
 
 export const { getFeedsSelector } = feedsSlice.selectors;
-export const {} = feedsSlice.actions;
+export const { addModal, refreshFeeds } = feedsSlice.actions;
 
 export default feedsSlice.reducer;

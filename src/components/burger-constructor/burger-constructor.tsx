@@ -1,19 +1,25 @@
 import { FC, useMemo } from 'react';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { getConstructorSelector } from '../../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
+import {
+  clearConstructor,
+  getConstructorSelector
+} from '../../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
 import {
   closeModal,
   getOrderSelector,
   orderBurger
 } from '../../services/slices/orderSlice/orderSlice';
+import { getUserSelector } from '../../services/slices/userSlice/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { ingredients, bun } = useSelector(getConstructorSelector);
+  const { isAuthenticated } = useSelector(getUserSelector);
   const { orderModalData: orderModal, orderRequest: request } =
     useSelector(getOrderSelector);
 
@@ -27,17 +33,22 @@ export const BurgerConstructor: FC = () => {
   const orderModalData = orderModal;
 
   const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
-    const orderIngredients = [
-      constructorItems.bun._id,
-      ...constructorItems.ingredients.map((ing) => ing._id),
-      constructorItems.bun._id
-    ];
-    dispatch(orderBurger(orderIngredients));
+    if (isAuthenticated === false) {
+      navigate('/login', { replace: true });
+    } else {
+      if (!constructorItems.bun || orderRequest) return;
+      const orderIngredients = [
+        constructorItems.bun._id,
+        ...constructorItems.ingredients.map((ing) => ing._id),
+        constructorItems.bun._id
+      ];
+      dispatch(orderBurger(orderIngredients));
+    }
   };
 
   const closeOrderModal = () => {
     dispatch(closeModal());
+    dispatch(clearConstructor());
   };
 
   const price = useMemo(

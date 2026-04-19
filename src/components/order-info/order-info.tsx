@@ -3,20 +3,17 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
-import { getConstructorSelector } from '../../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
-import { getOrderSelector } from '../../services/slices/orderSlice/orderSlice';
+import { getFeedsSelector } from '../../services/slices/feedsSlice/feedsSlice';
+import { getIngredientsSelector } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
-  const { ingredients: ingredientsForOrder } = useSelector(
-    getConstructorSelector
-  );
+  const { modalData } = useSelector(getFeedsSelector);
+  const { ingredients: ingredientsModal } = useSelector(getIngredientsSelector);
 
-  const { order } = useSelector(getOrderSelector);
+  const orderData = modalData;
 
-  const orderData = order;
-
-  const ingredients: TIngredient[] = ingredientsForOrder;
+  const ingredients: TIngredient[] = ingredientsModal;
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

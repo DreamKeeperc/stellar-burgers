@@ -19,10 +19,7 @@ import {
 } from '../../services/slices/ingredientsSlice/ingredientsSlice';
 import { useSelector, useDispatch } from '../../services/store';
 import { useEffect } from 'react';
-import {
-  checkUserAuth,
-  loginUser
-} from '../../services/slices/userSlice/userSlice';
+import { checkUserAuth } from '../../services/slices/userSlice/userSlice';
 
 import {
   AppHeader,
@@ -89,7 +86,6 @@ const App = () => {
           }
         />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/login'
           element={
@@ -132,12 +128,14 @@ const App = () => {
         >
           <Route index element={<Profile />} />
           <Route path='orders' element={<ProfileOrders />} />
-          <Route path='orders/:number' element={<OrderInfo />} />
         </Route>
+        <Route path='orders/:number' element={<OrderInfo />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
       </Routes>
 
       {background && (
-        <Routes location={location}>
+        <Routes>
           <Route
             path='/feed/:number'
             element={

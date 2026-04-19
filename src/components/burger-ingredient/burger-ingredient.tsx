@@ -1,7 +1,6 @@
 import { FC, memo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../services/store';
-
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
 import {
@@ -14,13 +13,11 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const location = useLocation();
     const dispatch = useDispatch();
     const { bun } = useSelector(getConstructorSelector);
-
     // взять данные из стора
-
     const handleAdd = () => {
       dispatch(addIngredient(ingredient));
       if (ingredient.type === bun?.type) {
-        dispatch(addIngredient(bun));
+        dispatch(addIngredient(ingredient));
       }
     };
 
