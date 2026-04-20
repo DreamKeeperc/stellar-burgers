@@ -21,13 +21,7 @@ import { useSelector, useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { checkUserAuth } from '../../services/slices/userSlice/userSlice';
 
-import {
-  AppHeader,
-  IngredientDetails,
-  Modal,
-  OrderInfo,
-  ProfileMenu
-} from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { ProtectedRoute } from '../ProtectedRoutes/ProtectedRoute';
 import { Preloader } from '@ui';
 import { ProfileLayout } from '../profileLayout/profileLayout';
@@ -129,9 +123,19 @@ const App = () => {
           <Route index element={<Profile />} />
           <Route path='orders' element={<ProfileOrders />} />
         </Route>
-        <Route path='orders/:number' element={<OrderInfo />} />
+        <Route path='/profile/orders/:number' element={<OrderInfo />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали ингредиента
+              </p>
+              <IngredientDetails />
+            </div>
+          }
+        />
       </Routes>
 
       {background && (

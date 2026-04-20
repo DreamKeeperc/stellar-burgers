@@ -1,7 +1,6 @@
 import { getFeedsApi } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TFeedsState } from './types';
-import { TOrder } from '@utils-types';
 
 export const fetchFeeds = createAsyncThunk('feeds/fetch', async () => {
   const res = await getFeedsApi();
@@ -15,17 +14,13 @@ const initialState: TFeedsState = {
     totalToday: 0
   },
   isLoading: false,
-  error: null,
-  modalData: null
+  error: null
 };
 
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
   reducers: {
-    addModal: (state, { payload }: PayloadAction<TOrder>) => {
-      state.modalData = payload;
-    },
     refreshFeeds: (state) => {
       state.feeds.orders = [];
     }
@@ -51,6 +46,6 @@ export const feedsSlice = createSlice({
 });
 
 export const { getFeedsSelector } = feedsSlice.selectors;
-export const { addModal, refreshFeeds } = feedsSlice.actions;
+export const { refreshFeeds } = feedsSlice.actions;
 
 export default feedsSlice.reducer;

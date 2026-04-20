@@ -6,10 +6,9 @@ import {
   TRegisterData,
   updateUserApi
 } from '@api';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUserState } from './types';
 import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie';
-import { TUser } from '@utils-types';
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
@@ -35,11 +34,16 @@ export const checkUserAuth = createAsyncThunk(
   'user/checkUser',
   async (_, { dispatch }) => {
     if (getCookie('accessToken')) {
-      dispatch(getUser()).finally(() => {
-        dispatch(authChecked());
-      });
+      try {
+        await dispatch(getUser());
+        return { isAuthenticated: true };
+      } catch (error) {
+        localStorage.clear();
+        deleteCookie('accessToken');
+        return { isAuthenticated: false };
+      }
     } else {
-      dispatch(authChecked());
+      return { isAuthenticated: false };
     }
   }
 );
@@ -57,20 +61,12 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk(
-  'user/logoutUser',
-  (_, { dispatch }) => {
-    logoutApi()
-      .then(() => {
-        localStorage.clear();
-        deleteCookie('accessToken');
-        dispatch(userLogout());
-      })
-      .catch(() => {
-        console.log('Ошибка выполнения выхода');
-      });
-  }
-);
+export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
+  const data = await logoutApi();
+  localStorage.clear();
+  deleteCookie('accessToken');
+  return data.success;
+});
 
 export const initialState: TUserState = {
   isAuthChecked: false,
@@ -83,14 +79,7 @@ export const initialState: TUserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    authChecked: (state) => {
-      state.isAuthChecked = true;
-    },
-    userLogout: (state) => {
-      state.data = null;
-    }
-  },
+  reducers: {},
   selectors: {
     getUserSelector: (state) => state
   },
@@ -157,10 +146,39 @@ export const userSlice = createSlice({
         state.data = action.payload;
         state.loginUserRequest = false;
         state.isAuthenticated = true;
+      })
+
+      //logoutUser
+      .addCase(logoutUser.pending, (state) => {
+        state.loginUserRequest = true;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.loginUserRequest = false;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loginUserRequest = false;
+        state.data = null;
+        state.isAuthenticated = false;
+        state.isAuthChecked = true;
+      })
+
+      //checkUserAuth
+      .addCase(checkUserAuth.pending, (state) => {
+        state.loginUserRequest = true;
+      })
+      .addCase(checkUserAuth.rejected, (state) => {
+        state.loginUserRequest = false;
+        state.isAuthChecked = true;
+        state.isAuthenticated = false;
+        state.data = null;
+      })
+      .addCase(checkUserAuth.fulfilled, (state, action) => {
+        state.loginUserRequest = false;
+        state.isAuthChecked = true;
+        state.isAuthenticated = action.payload.isAuthenticated;
       });
   }
 });
 
 export default userSlice.reducer;
-export const { authChecked, userLogout } = userSlice.actions;
 export const { getUserSelector } = userSlice.selectors;

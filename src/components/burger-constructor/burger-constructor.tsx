@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
@@ -20,8 +20,11 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const { ingredients, bun } = useSelector(getConstructorSelector);
   const { isAuthenticated } = useSelector(getUserSelector);
-  const { orderModalData: orderModal, orderRequest: request } =
-    useSelector(getOrderSelector);
+  const {
+    orderModalData: orderModal,
+    orderRequest: request,
+    order
+  } = useSelector(getOrderSelector);
 
   const constructorItems = {
     bun: bun,
@@ -48,7 +51,6 @@ export const BurgerConstructor: FC = () => {
 
   const closeOrderModal = () => {
     dispatch(closeModal());
-    dispatch(clearConstructor());
   };
 
   const price = useMemo(

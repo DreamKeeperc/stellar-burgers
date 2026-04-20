@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './burger-ingredient.module.css';
 import {
   Counter,
@@ -7,17 +7,10 @@ import {
   AddButton
 } from '@zlden/react-developer-burger-ui-components';
 import { TBurgerIngredientUIProps } from './type';
-import { useDispatch, useSelector } from '../../../services/store';
-import { showModal } from '../../../services/slices/modalIngredient/modalIngredientSlice';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
-    const dispatch = useDispatch();
-
-    const handleClick = () => {
-      dispatch(showModal(ingredient));
-    };
 
     return (
       <li className={styles.container}>
@@ -25,7 +18,6 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
           className={styles.article}
           to={`/ingredients/${_id}`}
           state={locationState}
-          onClick={handleClick}
         >
           {count && <Counter count={count} />}
           <img className={styles.img} src={image} alt='картинка ингредиента.' />

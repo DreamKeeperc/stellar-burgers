@@ -3,9 +3,9 @@ import ingredientsReducer from './slices/ingredientsSlice/ingredientsSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 import feedsReducer from '../services/slices/feedsSlice/feedsSlice';
 import ingredientsConstructorReducer from '../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
-import modalIngredientsReducer from './slices/modalIngredient/modalIngredientSlice';
 import userLoginReducer from '../services/slices/userSlice/userSlice';
 import ordersReducer from '../services/slices/orderSlice/orderSlice';
+import userOrdersReducer from '../services/slices/userOrdersSlice/userOrderSlice';
 
 import {
   TypedUseSelectorHook,
@@ -17,9 +17,9 @@ const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   feeds: feedsReducer,
   constructorIngredients: ingredientsConstructorReducer,
-  modalIngredient: modalIngredientsReducer,
   user: userLoginReducer,
-  order: ordersReducer
+  order: ordersReducer,
+  userOrders: userOrdersReducer
 }); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
