@@ -123,7 +123,14 @@ const App = () => {
           <Route index element={<Profile />} />
           <Route path='orders' element={<ProfileOrders />} />
         </Route>
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
         <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/ingredients/:id'
