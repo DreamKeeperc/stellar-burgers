@@ -1,4 +1,11 @@
-import { ThunkAction, ThunkDispatch, thunk } from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
+import ingredientsReducer from './slices/ingredientsSlice/ingredientsSlice';
+import { combineReducers } from '@reduxjs/toolkit';
+import feedsReducer from '../services/slices/feedsSlice/feedsSlice';
+import ingredientsConstructorReducer from '../services/slices/constructorIngredientsSlice/constructorIngredientsSlice';
+import userLoginReducer from '../services/slices/userSlice/userSlice';
+import ordersReducer from '../services/slices/orderSlice/orderSlice';
+import userOrdersReducer from '../services/slices/userOrdersSlice/userOrderSlice';
 
 import {
   TypedUseSelectorHook,
@@ -6,22 +13,25 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 
-const store = {};
+const rootReducer = combineReducers({
+  ingredients: ingredientsReducer,
+  feeds: feedsReducer,
+  constructorIngredients: ingredientsConstructorReducer,
+  user: userLoginReducer,
+  order: ordersReducer,
+  userOrders: userOrdersReducer
+}); // Заменить на импорт настоящего редьюсера
 
-export type RootState = any;
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== 'production'
+});
 
-type TApplicationActions = any;
+export type RootState = ReturnType<typeof rootReducer>;
 
-export type AppThunk<Return = void> = ThunkAction<
-  Return,
-  RootState,
-  unknown,
-  TApplicationActions
->;
+export type AppDispatch = typeof store.dispatch;
 
-export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;
-
-export const useDispatch = () => dispatchHook<AppDispatch>();
+export const useDispatch: () => AppDispatch = () => dispatchHook();
 export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
 
 export default store;

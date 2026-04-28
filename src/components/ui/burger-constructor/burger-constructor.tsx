@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import {
   Button,
   ConstructorElement,
@@ -86,7 +86,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         onClick={onOrderClick}
       />
     </div>
-    {/* Прелоадер в данном месте в "Можно лучше" */}
+
     {orderRequest && (
       <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
         <Preloader />
